@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
+import argparse
 
 def magnetExtract(banGuMiNum, targetSub, filter_=''):
     baseUrl = "https://mikanani.me/Home/Bangumi"
@@ -20,12 +21,17 @@ def magnetExtract(banGuMiNum, targetSub, filter_=''):
     mags = []
     for tr in targetTable.tbody.find_all('tr'):
         title = tr.find_all('a',class_='magnet-link-wrap')[0].text
-        if filter_ != '' and filter_ not in title:
+        if filter_ and filter_ != '' and (not (filter_ in title)):
             continue
         mag = tr.find_all('a',class_="js-magnet magnet-link")[0]['data-clipboard-text']
         mags.append(mag)
     return mags
 
-mags = magnetExtract('2320','Lilith-Raws')
+parser = argparse.ArgumentParser(description="get magnets from bugumi number")
+parser.add_argument('-b','--bnum',help='bangumi number')
+parser.add_argument('-s','--sub',help='sub name')
+parser.add_argument('-f','--filter',help='filter in title')
+args = parser.parse_args()
+mags = magnetExtract(args.bnum,args.sub,args.filter)
 for l in mags:
     print(l)
