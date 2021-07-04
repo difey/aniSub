@@ -3,6 +3,7 @@
 from bs4 import BeautifulSoup
 import requests
 import argparse
+import pyperclip
 
 def magnetExtract(banGuMiNum, targetSub, filter_=''):
     baseUrl = "https://mikanani.me/Home/Bangumi"
@@ -38,7 +39,12 @@ parser = argparse.ArgumentParser(description="get magnets from bugumi number")
 parser.add_argument('-b','--bnum',help='bangumi number')
 parser.add_argument('-s','--sub',help='sub name')
 parser.add_argument('-f','--filter',help='filter in title')
+parser.add_argument('-c','--copy',action="store_true",default=False)
 args = parser.parse_args()
 mags = magnetExtract(args.bnum,args.sub,args.filter)
+magsStr = ''
 for l in mags:
     print(l)
+    magsStr += l + '\n'
+if args.copy:
+    pyperclip.copy(magsStr)
