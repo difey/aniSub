@@ -13,13 +13,18 @@ def magnetExtract(banGuMiNum, targetSub, filter_=''):
     subs = central_container.find_all("div", class_="subgroup-text")
     tables = central_container.find_all("table")
     targetTable = None
+    subs_ = []
     for (sub,table) in zip(subs,tables):
-        print(sub.a.text)
+        subs_.append(sub.a.text)
         if sub.a.text == targetSub:
             targetTable = table
             break
     if not targetTable:
-        return
+        print('没有找到指定字幕组')
+        print('找到了如下字幕组：')
+        for i in subs_:
+            print(i)
+        return []
     mags = []
     for tr in targetTable.tbody.find_all('tr'):
         title = tr.find_all('a',class_='magnet-link-wrap')[0].text
